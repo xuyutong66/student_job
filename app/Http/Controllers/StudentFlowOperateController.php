@@ -64,8 +64,7 @@ class StudentFlowOperateController extends CommonController {
             $data['user_info']      = $user_info;
             $data['sign_up_status'] = $sign_up_status;
             $data['resume']         = $resume;
-            return view('resume/
-            ',compact('release','data'));
+            return view('resume/sign_up_resume_detail_from',compact('release','data'));
         }
     }
 
