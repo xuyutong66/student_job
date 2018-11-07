@@ -22,4 +22,10 @@ Route::post('company/admissions','BusinessFlowOperateController@employmentStuden
 Route::get('company/comment_from','BusinessFlowOperateController@companyCommentFrom');
 
 // 商家评价api
-Route::get('company/comment','BusinessFlowOperateController@companyComment');
+Route::post('company/comment','BusinessFlowOperateController@companyComment');
+
+// 确认完成工作api
+Route::post('company/confirm_complete','BusinessFlowOperateController@confirmComplete');
+
+// 结算api
+Route::post('company/settlement','BusinessFlowOperateController@settlement');

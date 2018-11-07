@@ -74,43 +74,27 @@
                         <p class="star_1"></p>
                     </div>
                     <div class="link">
-                        @if ($val['sign_up_status'] == 1)
+                        @if ($val['company_status'] == 1)
                             <span class="ty" data-id="{{ $val['position_id'] }}" data-user="{{ $val['user_id'] }}" onclick="agreeBtn(this)">同意</span>
                         @endif
 
-                        @if ($val['sign_up_status'] == 2)
-                                <span class="ty" data-id="{{ $val['position_id'] }}" data-user="{{ $val['user_id'] }}" onclick="agreeBtn(this)">同意</span>
+                        @if ($val['company_status'] == 2)
+                            <span class="ty" >对方已取消</span>
                         @endif
 
-                        @if ($val['sign_up_status'] == 3)
-                                <span class="ty" >已同意</span>
+                        @if ($val['company_status'] == 3)
+                            <span class="ty" data-id="{{ $val['position_id'] }}" data-user="{{ $val['user_id'] }}" onclick="confirmComplete(this)">确认完成</span>
                         @endif
 
-                        @if ($val['sign_up_status'] == 4)
-                                <span class="ty" >对方已取消</span>
+                        @if ($val['company_status'] == 4)
+                                <span class="ty" data-id="{{ $val['position_id'] }}" data-user="{{ $val['user_id'] }}" onclick="settlement(this)">结算</span>
                         @endif
 
-                        @if ($val['sign_up_status'] == 5)
-                                <span class="ty" >学生待评价</span>
-                        @endif
-
-                        @if ($val['sign_up_status'] == 6)
-                                <span class="ty" >学生已评价</span>
-                        @endif
-
-                        @if ($val['sign_up_status'] == 7)
-                                <span class="ty" >已完成工作</span>
-                        @endif
-
-                        @if ($val['sign_up_status'] == 8)
-                                <span class="ty" >已结算</span>
-                        @endif
-
-                        @if ($val['sign_up_status'] == 9)
+                        @if ($val['company_status'] == 5)
                                 <span class="ty" >待评价</span>
                         @endif
 
-                        @if ($val['sign_up_status'] == 10)
+                        @if ($val['company_status'] == 6)
                                 <span class="ty" >已评价</span>
                         @endif
                     </div>
@@ -128,6 +112,28 @@
         var id = $(obj).attr("data-id");
         var user_id = $(obj).attr("data-user");
         $.post('/company/admissions',{
+            id: id,
+            user_id: user_id
+        },function (res) {
+            alert(res.message);
+        },'json');
+    }
+
+    function settlement(obj) {
+        var id = $(obj).attr("data-id");
+        var user_id = $(obj).attr("data-user");
+        $.post('/company/settlement',{
+            id: id,
+            user_id: user_id
+        },function (res) {
+            alert(res.message);
+        },'json');
+    }
+
+    function confirmComplete(obj) {
+        var id = $(obj).attr("data-id");
+        var user_id = $(obj).attr("data-user");
+        $.post('/company/confirm_complete',{
             id: id,
             user_id: user_id
         },function (res) {

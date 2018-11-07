@@ -49,6 +49,7 @@ class BusinessFlowOperateController extends CommonController{
                 $sign_list[$key]['header_img']     = $student_info['header_img'];
                 $sign_list[$key]['name']           = $student_info['name'];
                 $sign_list[$key]['sign_up_status'] = $value['sign_up_status'];
+                $sign_list[$key]['company_status'] = $value['company_status'];
                 $sign_list[$key]['id']             = $value['id'];
                 $sign_list[$key]['user_id']        = $value['user_id'];
                 $sign_list[$key]['position_id']    = $value['position_id'];
@@ -70,12 +71,16 @@ class BusinessFlowOperateController extends CommonController{
                 self::errorJson('职位id不能为空!');
             }
 
+            if(!isset($user_id) || $user_id == null){
+                self::errorJson('用户id不能为空!');
+            }
+
             $position    = ReleaseModel::find($position_id);
             if($position['recurite_person_num'] < count($position['already_sign_up_num'])){
                 self::errorJson('招聘人数已满!');
             }
 
-            $updateStatus = SignUpModel::where('user_id',$user_id)->where('position_id',$position_id)->update(['sign_up_status' => 3,'company_status' => 2]);
+            $updateStatus = SignUpModel::where('user_id',$user_id)->where('position_id',$position_id)->update(['sign_up_status' => 3,'company_status' => 3]);
             if($updateStatus == true){
                 return self::successJson('录取成功!');
             }
@@ -83,6 +88,72 @@ class BusinessFlowOperateController extends CommonController{
         } catch (\Exception $exception) {
 
             logger()->error('录取数据异常' . $exception->getMessage(), ['exception' => $exception]);
+
+            return [
+                'code'    => $exception->getCode(),
+                'message' => $exception->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * 确认完成工作api
+     * @param Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     */
+    public function confirmComplete(Request $request){
+        try {
+            $user_id     = $request->get('user_id');
+            $position_id = $request->get('id');
+            if(!isset($position_id) || $position_id == null){
+                self::errorJson('职位id不能为空!');
+            }
+
+            if(!isset($user_id) || $user_id == null){
+                self::errorJson('用户id不能为空!');
+            }
+
+            $updateStatus = SignUpModel::where(['user_id' => $user_id,'position_id' => $position_id])->update(['sign_up_status' => 5,'company_status' => 4]);
+            if($updateStatus == true){
+                return self::successJson('确认完成成功!');
+            }
+            return self::errorJson('确认完成失败!');
+        } catch (\Exception $exception) {
+
+            logger()->error('确认完成数据异常' . $exception->getMessage(), ['exception' => $exception]);
+
+            return [
+                'code'    => $exception->getCode(),
+                'message' => $exception->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * 结算api
+     * @param Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     */
+    public function settlement(Request $request){
+        try {
+            $user_id     = $request->get('user_id');
+            $position_id = $request->get('id');
+            if(!isset($position_id) || $position_id == null){
+                self::errorJson('职位id不能为空!');
+            }
+
+            if(!isset($user_id) || $user_id == null){
+                self::errorJson('用户id不能为空!');
+            }
+
+            $updateStatus = SignUpModel::where(['user_id' => $user_id,'position_id' => $position_id])->update(['company_status' => 5]);
+            if($updateStatus == true){
+                return self::successJson('结算成功!');
+            }
+            return self::errorJson('结算失败!');
+        } catch (\Exception $exception) {
+
+            logger()->error('结算数据异常' . $exception->getMessage(), ['exception' => $exception]);
 
             return [
                 'code'    => $exception->getCode(),
@@ -124,7 +195,7 @@ class BusinessFlowOperateController extends CommonController{
             $data    = $request->get('data');
             $praise  = $request->get('praise');
             foreach ($data as $key => $val){
-                SignUpModel::where('id',$val['id'])->update(['level' => $val['level'],'praise' => $praise]);
+                SignUpModel::where('id',$val['id'])->update(['level' => $val['level'],'praise' => $praise,'company_status' => 6]);
             }
             return self::successJson('评价成功!');
         } catch (\Exception $exception) {

@@ -125,7 +125,7 @@
             </div>
         @elseif($data['sign_up_status']->company_status == 5)
             <div class="footer fixed-bottom">
-                <a class="dlq" href="company/comment_from?position_id={{ $release->id }}">待评价</a>
+                <a class="dlq" href="/company/comment_from?position_id={{ $release->id }}">待评价</a>
             </div>
         @endif
     @endif

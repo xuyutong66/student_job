@@ -202,7 +202,7 @@ class StudentFlowOperateController extends CommonController {
                 return self::errorJson('取消原因不能为空!');
             }
 
-            $update_sign_up  = SignUpModel::where('id',$sign_up_id)->update(['sign_up_status' => 4,'company_status' => 3,'remark' => $remark,'cancel_time' => Carbon::now()]);
+            $update_sign_up  = SignUpModel::where('id',$sign_up_id)->update(['sign_up_status' => 4,'company_status' => 2,'remark' => $remark,'cancel_time' => Carbon::now()]);
             $get_position_id = SignUpModel::where('id',$sign_up_id)->first();
             $release         = ReleaseModel::where('id',$get_position_id['position_id'])->first();
             ReleaseModel::where('id',$get_position_id['position_id'])->update(['already_sign_up_num' => $release['already_sign_up_num'] - 1]);
